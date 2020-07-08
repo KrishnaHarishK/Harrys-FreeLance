@@ -1,0 +1,17 @@
+docker rm -f -v $(docker ps -q)
+systemctl stop kubelet
+systemctl stop docker
+find /var/lib/kubelet | xargs -n 1 findmnt -n -t tmpfs -o TARGET -T | uniq | xargs -r umount -v
+rm -r -f /etc/kubernetes /var/lib/kubelet /var/lib/etcd
+kubeadm reset
+iptables --flush
+sudo rm -rf ~/.kube
+sudo rm -rf /etc/kubernetes
+yum remove -y kubelet kubeadm kubectl
+# REBOOT
+yum install -y kubelet kubeadm kubectl
+systemctl start docker &amp;&amp; systemctl enable docker
+systemctl start kubelet &amp;&amp; systemctl enable kubelet
+systemctl daemon-reload
+systemctl enable --now kubelet
+systemctl restart kubelet
