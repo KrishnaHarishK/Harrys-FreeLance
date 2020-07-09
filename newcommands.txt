@@ -16,7 +16,9 @@ systemctl daemon-reload
 systemctl enable --now kubelet
 systemctl restart kubelet
 
-
+======
+sysctl net.bridge.bridge-nf-call-iptables=1
+======
 
 
 Your Kubernetes control-plane has initialized successfully!
